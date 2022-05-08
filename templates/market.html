@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <!-- Your Columns HERE -->
-                <th scope="col">ID</th>
+
                 <th scope="col">Date</th>
                 <th scope="col">ABEPOID</th>
                 <th scope="col">ITEMID</th>
@@ -15,13 +15,30 @@
                 <th scope="col">Author</th>
                 <th scope="col">Title</th>
                 <th scope="col">Price</th>
+                <th scope="col">Country</th>
 
             </tr>
         </thead>
         <tbody>
+                <p>
+                  <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Link with href
+                  </a>
+                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Button with data-bs-target
+                  </button>
+                </p>
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                  </div>
+                </div>
+
+
+
             {% for item in items %}
             <tr>
-                <td>{{ item[0] }}</td>
+
                 <td>{{ item[0] }}</td>
                 <td>{{ item[2] }}</td>
                 <td>{{ item[3] }}</td>
@@ -29,13 +46,16 @@
                 <td><a href="http://www.google.com">{{ item[6] }}</a></td>
                 <td>{{ item[7] }}</td>
                 <td>${{ item[10] }}</td>
+                <td>{{ item[18] }}</td>
 
                 <td>
                     <button class="btn btn-outline btn-info">More</button>
                     <button class="btn btn-outline btn-success">Buy</button>
                 </td>
+                {% endfor %}
             </tr>
-        {% endfor %}
+
+
         </tbody>
     </table>
 {% endblock %}

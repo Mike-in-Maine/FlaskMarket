@@ -61,8 +61,8 @@ def market_page():
     pd.set_option('display.width', None)
     conn = get_db_connection()
     items = conn.execute('SELECT * FROM orders ORDER BY ORDERDATE DESC LIMIT 300').fetchall()
-    #df = pd.DataFrame(items)
-    #df.sort_values(by=[1], inplace=True, ascending = True)
+    df = pd.DataFrame(items)
+    print(df)
     return render_template('market.html', items = items)
 
 def get_abe_API_neworders():
