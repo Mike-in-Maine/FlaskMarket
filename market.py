@@ -1,5 +1,8 @@
 from flask import Flask
 from flask import render_template
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy import create_engine
@@ -9,15 +12,23 @@ import xml.etree.ElementTree as ET
 import xmltodict, json
 import untangle
 import pymysql
+import sqlite3
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///market.db'
+app.config['SQLALCHEMY_DATABASE_URI']= 'mysql+pymysql://miky1973:itff2020@mysql.irish-booksellers.com:3306/irishbooksellers'
 db = SQLAlchemy(app)
 
-app2 = Flask(__name__)
-app2.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///market.db'
-db2 = SQLAlchemy(app)
 
+#app = Flask(__name__)
+#app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///market.db'
+#db = SQLAlchemy(app)
+
+app.config['SECRET_KEY'] = ""
+
+def get_db_connection():
+    #conn = sqlite3.connect('market.db')
+    conn = sqlalchemy.create_engine('mysql+pymysql://miky1973:itff2020@mysql.irish-booksellers.com:3306/irishbooksellers')
+    return conn
 
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -29,8 +40,14 @@ class Item(db.Model):
     def __repr__(self):
         return f'Item {self.Item}'
 
+
 @app.route('/')
 def home_page():
+    #conn = get_db_connection()
+    #prices = conn.execute('SELECT * FROM orders ORDER BY 1').fetchall()
+    #print(prices)
+    #conn.close()
+
     return render_template('home.html')
 
 @app.route('/home')
@@ -39,9 +56,14 @@ def home():
 
 @app.route('/market')
 def market_page():
-
-    items = Item.query.all()
-    return render_template('market.html', items = items, citys = citys)
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    conn = get_db_connection()
+    items = conn.execute('SELECT * FROM orders ORDER BY ORDERDATE DESC LIMIT 300').fetchall()
+    #df = pd.DataFrame(items)
+    #df.sort_values(by=[1], inplace=True, ascending = True)
+    return render_template('market.html', items = items)
 
 def get_abe_API_neworders():
     df = pd.DataFrame()
