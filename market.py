@@ -60,7 +60,10 @@ def market_page():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', None)
     conn = get_db_connection()
+    connector = conn.execute('SELECT * FROM orders ORDER BY ORDERDATE DESC LIMIT 300')
     items = conn.execute('SELECT * FROM orders ORDER BY ORDERDATE DESC LIMIT 300').fetchall()
+    for row in connector:
+        print(row)
     df = pd.DataFrame(items)
     print(df)
     return render_template('market.html', items = items)
